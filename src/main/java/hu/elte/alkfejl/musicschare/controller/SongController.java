@@ -1,5 +1,6 @@
 package hu.elte.alkfejl.musicschare.controller;
 
+import hu.elte.alkfejl.musicschare.model.Playlist;
 import hu.elte.alkfejl.musicschare.model.Song;
 import hu.elte.alkfejl.musicschare.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +47,42 @@ public class SongController {
     public ResponseEntity<Song> replace(@PathVariable Integer id, @RequestBody Song song) {
         Optional<Song> oSong = songRepository.findById(id);
         if (oSong.isPresent()) {
+            song.setId(oSong.get().getId());
+            return ResponseEntity.ok(songRepository.save(song));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Song> modify(@PathVariable Integer id, @RequestBody Song song) {
+        Optional<Song> oSong = songRepository.findById(id);
+        if (oSong.isPresent()) {
             Song modifiableSong = oSong.get();
-            modifiableSong.setAuthor(modifiableSong.getAuthor());
+            if (song.getAuthor() != null) {
+                modifiableSong.setAuthor((song.getAuthor()));
+            }
+            if (song.getGenre() != null) {
+                modifiableSong.setGenre((song.getGenre()));
+            }
+            if (song.getTitle() != null) {
+                modifiableSong.setTitle((song.getTitle()));
+            }
+            if (song.getLength() != null) {
+                modifiableSong.setLength((song.getLength()));
+            }
             return ResponseEntity.ok(songRepository.save(modifiableSong));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Integer id) {
+        Optional<Song> oSong = songRepository.findById(id);
+        if (oSong.isPresent()) {
+            songRepository.delete(oSong.get());
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }
