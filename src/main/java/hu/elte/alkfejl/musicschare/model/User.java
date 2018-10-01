@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -22,4 +22,14 @@ public class User {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public enum Role {
+        ROLE_GUEST, ROLE_USER, ROLE_ADMIN
+    }
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<Playlist> playlists;
 }

@@ -22,4 +22,7 @@ public class Song {
 
     private String genre;
 
+    @ManyToMany(mappedBy = "songs")
+    @JsonIgnore
+    private List<Playlist> playlists;
 }

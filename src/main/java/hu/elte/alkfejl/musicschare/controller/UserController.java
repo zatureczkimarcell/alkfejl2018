@@ -5,6 +5,8 @@ import hu.elte.alkfejl.musicschare.model.User;
 import hu.elte.alkfejl.musicschare.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.Response;
@@ -19,11 +21,13 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("")
+    @Secured({ "ROLES_USER" })
     public Iterable<User> getAll() {
         return userRepository.findAll();
     }
 
     @GetMapping("/{id}")
+    @Secured({ "ROLES_USER" })
     public ResponseEntity<User> get(@PathVariable Integer id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
@@ -33,8 +37,17 @@ public class UserController {
         }
     }
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @PostMapping("")
-    public User create(@RequestBody User user) {
-        return userRepository.save(user);
+    public ResponseEntity<User> create(@RequestBody User user) {
+        Optional<User> oUser = userRepository.findByUserName(user.getUserName());
+        if (oUser.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(User.Role.ROLE_USER);
+        return ResponseEntity.ok(userRepository.save(user));
     }
 }

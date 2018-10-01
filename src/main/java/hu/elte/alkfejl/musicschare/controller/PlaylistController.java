@@ -7,6 +7,7 @@ import hu.elte.alkfejl.musicschare.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/playlists")
+@Secured({ "ROLES_USER" })
 public class PlaylistController {
 
     @Autowired
@@ -22,7 +24,7 @@ public class PlaylistController {
     @Autowired
     private SongRepository songRepository;
 
-    @GetMapping("/")
+    @GetMapping("")
     public Iterable<Playlist> getAll() {
         return playlistRepository.findAll();
     }
@@ -56,4 +58,41 @@ public class PlaylistController {
         }
     }
 
+    @PostMapping("/{id}/songs")
+    public ResponseEntity<List<Song>> addSong(@PathVariable Integer id, @RequestBody Song song) {
+        Optional<Playlist> oPlaylist = playlistRepository.findById(id);
+        Optional<Song> oSong = songRepository.findById(song.getId());
+        if (oPlaylist.isPresent() && oSong.isPresent()) {
+            Playlist playlist = oPlaylist.get();
+            playlist.getSongs().add(oSong.get());
+            playlistRepository.save(playlist);
+            return ResponseEntity.ok(playlist.getSongs());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{playlistId}/songs/{songId}")
+    public ResponseEntity removeSong(@PathVariable Integer playlistId,
+                                     @PathVariable Integer songId) {
+        Optional<Playlist> oPlaylist = playlistRepository.findById(playlistId);
+        if (oPlaylist.isPresent()) {
+            Playlist playlist = oPlaylist.get();
+            Optional<Song> oSong = playlist.getSongs().stream()
+                    .filter(song -> song.getId() == songId)
+                    .findFirst();
+            if (oSong.isPresent()) {
+                List<Song> filteredSongs = playlist.getSongs().stream()
+                        .filter(song -> song.getId() != songId)
+                        .collect(Collectors.toList());
+                playlist.setSongs(filteredSongs);
+                playlistRepository.save(playlist);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

@@ -14,4 +14,10 @@ public class Playlist {
 
     private String name;
 
+    @ManyToMany
+    private List<Song> songs;
+
+    @ManyToOne
+    private User owner;
+
 }
