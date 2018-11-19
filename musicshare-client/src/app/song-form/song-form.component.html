@@ -2,24 +2,71 @@
   <div class="row">
     <div class="col">
       <h1>Add song</h1>
-      <form class="row">
+      <form
+        (submit)="save(songForm)"
+        #songForm="ngForm"
+        class="row"
+      >
         <mat-form-field class="col">
-          <input matInput placeholder="Title">
-        </mat-form-field>
-        <mat-form-field class="col">
-          <input matInput placeholder="Author">
+          <input
+            [(ngModel)]="model.title"
+            name="title"
+            #title="ngModel"
+            matInput
+            placeholder="Title"
+            required
+          >
+          <mat-error *ngIf="title.invalid">
+            This field is required.
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="col">
           <input
-            type="number"
+            [(ngModel)]="model.author"
+            name="author"
+            #author="ngModel"
             matInput
-            placeholder="Length"
+            placeholder="Author"
+            required
           >
+          <mat-error *ngIf="author.invalid">
+            This field is required.
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="col">
-          <input matInput placeholder="Genre">
+          <input
+            [(ngModel)]="model.length"
+            name="length"
+            type="number"
+            #length="ngModel"
+            matInput
+            placeholder="Length"
+            required
+          >
+          <mat-error *ngIf="length.invalid">
+            This field is required.
+          </mat-error>
         </mat-form-field>
-        <button mat-button>Save</button>
+        <mat-form-field class="col">
+          <input
+            [(ngModel)]="model.genre"
+            name="genre"
+            matInput
+            #genre="ngModel"
+            placeholder="Genre"
+            required
+            minlength="3"
+          >
+          <mat-error *ngIf="genre.invalid && genre.errors['required']">
+            This field is required.
+          </mat-error>
+          <mat-error *ngIf="genre.invalid && genre.errors['minlength']">
+            You must enter at least {{ genre.errors['minlength'].requiredLength }} characters.
+          </mat-error>
+        </mat-form-field>
+        <button
+          mat-button
+        >Save</button>
       </form>
     </div>
   </div>
