@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { PlaylistService } from '../playlist.service';
 
 @Component({
   selector: 'app-playlist-list',
@@ -8,16 +9,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 export class PlaylistListComponent
   implements OnInit, OnDestroy {
 
-  playlistItems: string[] = [
-    'Eurobeat',
-    'Rock',
-    'Vegyes',
-  ];
-
-  filteredPlaylistItems: string[];
   submitted: boolean = false;
+  playlistItems: string[];
 
-  constructor() { }
+  constructor(
+    public playlistService: PlaylistService
+  ) { }
 
   ngOnInit() {
   }
@@ -26,16 +23,8 @@ export class PlaylistListComponent
   }
 
   filter(filterText: string) {
-    this.filteredPlaylistItems = [];
-    for (let playlistItem of this.playlistItems) {
-
-      if (playlistItem.startsWith(filterText)) {
-
-        this.filteredPlaylistItems.push(playlistItem);
-
-      }
-
-    }
+    this.playlistItems = this.playlistService
+      .filter(filterText);
     this.submitted = true;
   }
 

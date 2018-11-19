@@ -15,8 +15,10 @@
         <h2 class="col-12">Lists</h2>
         <ul class="col-12">
           <li
-            *ngFor="let playlistItem of filteredPlaylistItems"
-          >{{ playlistItem }}</li>
+            *ngFor="let playlistItem of playlistItems"
+          >
+            <a [routerLink]="'/playlist/' + playlistItem">{{ playlistItem }}</a>
+          </li>
         </ul>
       </div>
     </div>
