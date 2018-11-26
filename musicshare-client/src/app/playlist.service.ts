@@ -1,33 +1,36 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Playlist } from './model/Playlist';
+import { Song } from './model/Song';
 
 @Injectable()
 export class PlaylistService {
 
-  private playlistItems: string[] = [
-    'Eurobeat',
-    'Rock',
-    'Vegyes',
-  ];
+  private playlistItems: Playlist[] = [];
 
-  private playlistSongs: Map<string, string[]> = new Map();
-  // private playlistSongs: { [key: string]: string[] };
+  constructor(
+    private httpClient: HttpClient
+  ) { }
 
-
-  constructor() {
-    this.playlistSongs.set('Rock', ['Bon Jovi', 'ACDC']);
-    this.playlistSongs.set('Eurobeat', ['DJ Bobo']);
-    this.playlistSongs.set('Vegyes', []);
+  getPlaylist(playlistId: number): Promise<Playlist> {
+    const playlist = this.playlistItems.find(
+      playlist => playlist.id === playlistId
+    );
+    if (playlist) {
+      return Promise.resolve(playlist);
+    } else {
+      return this.httpClient
+        .get<Playlist>(`/api/playlists/${playlistId}`)
+        .toPromise()
+        .then(playlist => { return playlist });
+    }
   }
 
-  getPlaylist(playlistName: string): string[] {
-    return this.playlistSongs.get(playlistName);
-  }
-
-  filter(filterText: string): string[] {
-    const filteredPlaylistItems = [];
+  filter(filterText: string): Playlist[] {
+    const filteredPlaylistItems: Playlist[] = [];
     for (let playlistItem of this.playlistItems) {
 
-      if (playlistItem.startsWith(filterText)) {
+      if (playlistItem.name.startsWith(filterText)) {
 
         filteredPlaylistItems.push(playlistItem);
 
@@ -35,5 +38,13 @@ export class PlaylistService {
 
     }
     return filteredPlaylistItems;
+  }
+
+  requestPlaylists() {
+    this.httpClient
+      .get<Playlist[]>('/api/playlists')
+      .toPromise()
+      .then(playlists =>
+          this.playlistItems = playlists);
   }
 }

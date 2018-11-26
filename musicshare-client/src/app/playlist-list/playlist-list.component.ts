@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PlaylistService } from '../playlist.service';
+import { Playlist } from '../model/Playlist';
 
 @Component({
   selector: 'app-playlist-list',
@@ -10,13 +11,14 @@ export class PlaylistListComponent
   implements OnInit, OnDestroy {
 
   submitted: boolean = false;
-  playlistItems: string[];
+  playlistItems: Playlist[];
 
   constructor(
     public playlistService: PlaylistService
   ) { }
 
   ngOnInit() {
+    this.playlistService.requestPlaylists();
   }
 
   ngOnDestroy() {

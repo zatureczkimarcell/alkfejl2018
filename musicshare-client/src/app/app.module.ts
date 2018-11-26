@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { PlaylistFilterComponent } from './playlist-filter/playlist-filter.component';
 import { SongListComponent } from './song-list/song-list.component';
 import { PlaylistService } from './playlist.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { PlaylistService } from './playlist.service';
     MatInputModule,
     RoutingModule,
     FormsModule,
+    HttpClientModule,
   ],
   providers: [PlaylistService],
   bootstrap: [AppComponent]

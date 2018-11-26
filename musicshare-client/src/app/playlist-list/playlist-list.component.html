@@ -17,7 +17,9 @@
           <li
             *ngFor="let playlistItem of playlistItems"
           >
-            <a [routerLink]="'/playlist/' + playlistItem">{{ playlistItem }}</a>
+            <a [routerLink]="'/playlist/' + playlistItem.id">
+              {{ playlistItem.name }}
+            </a>
           </li>
         </ul>
       </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Song } from '../model/Song';
 import { NgForm } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-song-form',
@@ -11,14 +12,20 @@ export class SongFormComponent implements OnInit {
 
   model: Song = new Song();
 
-  constructor() { }
+  constructor(
+    private httpClient: HttpClient
+  ) { }
 
   ngOnInit() {
   }
 
-  save(form: NgForm) {
+  async save(form: NgForm) {
     if (form.valid) {
-      console.log(form.value);
+      const newSong: Song = form.value;
+      const res = await this.httpClient
+        .post('/api/songs', newSong)
+        .toPromise();
+      console.log(res);
     }
   }
   
