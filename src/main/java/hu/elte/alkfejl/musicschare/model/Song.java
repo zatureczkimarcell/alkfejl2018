@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 public class Song {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String title;

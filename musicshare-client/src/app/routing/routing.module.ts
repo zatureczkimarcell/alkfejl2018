@@ -20,6 +20,10 @@ const routes: Routes = [
     component: SongFormComponent,
   },
   {
+    path: 'playlist/:id/songs/new',
+    component: SongFormComponent,
+  },
+  {
     path: 'playlist/:id',
     component: SongListComponent,
   },

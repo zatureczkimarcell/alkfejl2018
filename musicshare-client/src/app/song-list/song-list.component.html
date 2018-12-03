@@ -6,7 +6,15 @@
     <ul class="col-12">
       <li
         *ngFor="let song of songs"
-      >{{ song.title }}</li>
+      >
+        <span>{{ song.title }}</span>
+        <button mat-icon-button (click)="deleteSong(song.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </li>
     </ul>
+    <div class="col-12">
+      <a [routerLink]="'songs/new'">Add new song</a>
+    </div>
   </div>
 </div>

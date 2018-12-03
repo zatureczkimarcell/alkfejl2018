@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PlaylistService } from '../playlist.service';
 import { ActivatedRoute } from '@angular/router';
 import { Song } from '../model/Song';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-song-list',
@@ -15,11 +16,20 @@ export class SongListComponent implements OnInit {
 
   constructor(
     private playlistService: PlaylistService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private httpClient: HttpClient
   ) { }
 
   ngOnInit() {
     this.getPlaylist();
+  }
+
+  public async deleteSong(songId: number) {
+    const playlistId = parseInt(this.route.snapshot.params.id as string);
+    await this.httpClient.delete<null>(
+      `/api/playlists/${playlistId}/songs/${songId}`
+    ).toPromise();
+    await this.getPlaylist();
   }
 
   private async getPlaylist() {
