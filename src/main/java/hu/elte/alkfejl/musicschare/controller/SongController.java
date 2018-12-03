@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/songs")
-// @Secured({ "ROLES_USER" })
+@Secured({ "ROLE_USER" })
 public class SongController {
 
     @Autowired

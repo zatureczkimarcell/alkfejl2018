@@ -3,6 +3,7 @@ package hu.elte.alkfejl.musicschare.controller;
 import hu.elte.alkfejl.musicschare.model.Playlist;
 import hu.elte.alkfejl.musicschare.model.User;
 import hu.elte.alkfejl.musicschare.repository.UserRepository;
+import hu.elte.alkfejl.musicschare.security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -20,14 +21,17 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AuthenticatedUser authenticatedUser;
+
     @GetMapping("")
-    @Secured({ "ROLES_USER" })
+    @Secured({ "ROLE_USER" })
     public Iterable<User> getAll() {
         return userRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    @Secured({ "ROLES_USER" })
+    @Secured({ "ROLE_USER" })
     public ResponseEntity<User> get(@PathVariable Integer id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
@@ -35,6 +39,11 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<User> login() {
+        return ResponseEntity.ok(authenticatedUser.getUser());
     }
 
     @Autowired

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/playlists")
-// @Secured({ "ROLES_USER" })
+@Secured({ "ROLE_USER" })
 public class PlaylistController {
 
     @Autowired

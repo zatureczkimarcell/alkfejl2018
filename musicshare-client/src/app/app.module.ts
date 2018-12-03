@@ -7,11 +7,12 @@ import { MatIconModule, MatToolbarModule, MatButtonModule, MatFormFieldModule, M
 import { PlaylistListComponent } from './playlist-list/playlist-list.component';
 import { SongFormComponent } from './song-form/song-form.component';
 import { RoutingModule } from './routing/routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PlaylistFilterComponent } from './playlist-filter/playlist-filter.component';
 import { SongListComponent } from './song-list/song-list.component';
 import { PlaylistService } from './playlist.service';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
     SongFormComponent,
     PlaylistFilterComponent,
     SongListComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,6 +33,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatInputModule,
     RoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
   ],
   providers: [PlaylistService],

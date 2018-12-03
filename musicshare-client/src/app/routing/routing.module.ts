@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PlaylistListComponent } from '../playlist-list/playlist-list.component';
 import { SongFormComponent } from '../song-form/song-form.component';
 import { SongListComponent } from '../song-list/song-list.component';
+import { LoginComponent } from '../login/login.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'playlist/:id',
     component: SongListComponent,
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
   },
 ];
 
